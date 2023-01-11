@@ -1,5 +1,6 @@
 import React from 'react';
 import logo from '../Assets/images/svg/Logo.svg'
+import ListMenu from "./ListMenu";
 
 const doormatNavigation = [
     {id: 1, title: 'Home', link: 'home'},
@@ -24,21 +25,16 @@ const socialMediaList = [
 function Footer(props) {
     return (
         <footer className="little-lemon-footer">
-            <img src={logo} alt="little lemon logo"/>
-            <ul className="list-menu">
-                <li>
+            <div style={{height: '100%', margin: "auto 0"}}>
+                <img src={logo} alt="little lemon logo"/>
+            </div>
+
+            <ListMenu className="v-space-item" extraItem={<li>
                     <span style={{fontWeight: 'bold'}}>
                         Doormat navigation
                     </span>
-                </li>
-                {
-                    doormatNavigation.map(item => <li className="list-item v-space-item" key={item.id}>
-                        <a className="link" href={item.link}>
-                            {item.title}
-                        </a>
-                    </li>)
-                }
-            </ul>
+            </li>}/>
+
             <ul className="list-menu">
                 <li>
                     <span style={{fontWeight: 'bold'}}>
