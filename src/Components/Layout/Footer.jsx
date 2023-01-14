@@ -1,5 +1,5 @@
 import React from 'react';
-import logo from '../Assets/images/svg/Logo.svg'
+import logo from '../../Assets/images/svg/Logo.svg'
 import ListMenu from "./ListMenu";
 
 const doormatNavigation = [
@@ -15,7 +15,6 @@ const contactList = [
     {id: 2, title: 'Phone number', value: "+123456789"},
     {id: 3, title: 'Email', value: "test@test.test"},
 ]
-
 const socialMediaList = [
     {id: 1, title: 'Instagram', value: "@test"},
     {id: 2, title: 'Facebook', value: "@test"},
@@ -25,7 +24,7 @@ const socialMediaList = [
 function Footer(props) {
     return (
         <footer className="little-lemon-footer">
-            <div style={{height: '100%', margin: "auto 0"}}>
+            <div style={{height: '100%', margin: "auto 20"}}>
                 <img src={logo} alt="little lemon logo"/>
             </div>
 
