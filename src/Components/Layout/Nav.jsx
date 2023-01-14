@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
-import icon_ham from '../Assets/images/svg/icon _hamburger menu.svg'
-import closeIcon from '../Assets/images/svg/x-symbol-svgrepo-com.svg'
+import icon_ham from '../../Assets/images/svg/icon _hamburger menu.svg'
+import closeIcon from '../../Assets/images/svg/x-symbol-svgrepo-com.svg'
 import ListMenu from "./ListMenu";
 
 const menus = [

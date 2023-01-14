@@ -1,5 +1,5 @@
 import React from 'react';
-import logo from '../Assets/images/svg/Logo.svg'
+import logo from '../../Assets/images/svg/Logo.svg'
 import Nav from "./Nav";
 import NavMobileMode from "./NavMobileMode";
 

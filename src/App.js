@@ -1,8 +1,10 @@
 import React from 'react';
+import { ChakraProvider } from '@chakra-ui/react'
+
 import './App.css';
-import Header from "./Components/Header";
-import Main from "./Components/Main";
-import Footer from "./Components/Footer";
+import Header from "./Components/Layout/Header";
+import Main from "./Components/Layout/Main";
+import Footer from "./Components/Layout/Footer";
 import {Route, Routes} from "react-router-dom";
 import HomePage from "./Pages/HomePage";
 import AboutPage from "./Pages/AboutPage";
@@ -13,7 +15,7 @@ import LoginPage from "./Pages/LoginPage";
 
 function App() {
     return (
-        <>
+        <ChakraProvider>
             <Header/>
 
             <Main>
@@ -28,7 +30,7 @@ function App() {
                 </Routes>
             </Main>
             <Footer/>
-        </>
+        </ChakraProvider>
     );
 }
 
