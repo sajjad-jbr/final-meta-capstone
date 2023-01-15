@@ -1,8 +1,10 @@
-import React, {useReducer, useState} from 'react';
+import React, {useReducer} from 'react';
 import {useFormik} from 'formik'
 import * as Yup from 'yup'
+import {useNavigate} from 'react-router-dom'
 import {
     Box,
+    Button,
     FormControl,
     FormErrorMessage,
     FormLabel,
@@ -12,41 +14,32 @@ import {
     NumberInputField,
     Select,
     VStack,
-    Button
+    useToast
 } from '@chakra-ui/react'
-const hoursBooking = [
-    {title: 'place select time', value: ''},
-    {title: '17:00', value: '17:00'},
-    {title: '18:00', value: '18:00'},
-    {title: '19:00', value: '19:00'},
-    {title: '20:00', value: '20:00'},
-    {title: '21:00', value: '21:00'},
-    {title: '22:00', value: '22:00'},
-]
+
+import {fetchAPI, submitAPI, updateTimes} from "../../util/api";
+
 const widthResponsive = {
-    sm:"100%",
-    md:"100%",
-    lg:"50%",
-    xl:"50%",
-    "2xl":"50%",
+    sm: "100%",
+    md: "100%",
+    lg: "50%",
+    xl: "50%",
+    "2xl": "50%",
 }
 
-function FormBooking({getAvailableTimes=()=>{}, ...props}) {
-    // const [availableTimes, setAvailableTimes] = useState(hoursBooking);
-    const reducer = (state, action) => {
-        switch (action.type) {
-            case "removeItem":
-                let t = [...state]
-                t= t.filter(item=>{
-                    return item.value !== action.payload
-                })
-                return t;
-            default:
-                return state;
-        }
-    };
+export const initializeTimes = () => {
+    const data = fetchAPI(new Date())
 
-    const handleReset = ()=>{
+    return data.map((item) => ({value: item, label: item}))
+}
+
+function FormBooking({ ...props}) {
+
+    const toast = useToast()
+
+
+
+    const handleReset = () => {
         formik.handleReset({
             dateBooking: "",
             timeBooking: "",
@@ -55,16 +48,36 @@ function FormBooking({getAvailableTimes=()=>{}, ...props}) {
         });
     }
 
-    const handleSubmitForm = () => {
-        let t = [...availableTimes]
-        t= t.filter(item=>{
-            return item.value !== formik.values.timeBooking
+    const [availableTimes, setAvailableTimes] = useReducer(updateTimes, initializeTimes())
+
+    const handleSubmitForm = (e) => {
+        setAvailableTimes({
+            type: "ADD_BOOKING",
+            payload: e.timeBooking,
         })
-        availableTimesDispatch({type:"removeItem",payload:formik.values.timeBooking})
-        getAvailableTimes(t)
-        handleReset()
+
+        const response = submitAPI(e)
+        if (response) {
+            toast({
+                title: 'Reservation registered.',
+                description: "Your reservation has been successfully registered.",
+                status: 'success',
+                duration: 5000,
+                isClosable: true,
+            })
+            handleReset()
+        }else{
+            toast({
+                title: 'Reservation registered.',
+                description: "error",
+                status: 'error',
+                duration: 5000,
+                isClosable: true,
+            })
+        }
+
     }
-    const [availableTimes, availableTimesDispatch] = useReducer(reducer, hoursBooking);
+
     const formik = useFormik({
         onSubmit: handleSubmitForm,
         initialValues: {
@@ -76,16 +89,14 @@ function FormBooking({getAvailableTimes=()=>{}, ...props}) {
         validationSchema: Yup.object({
             dateBooking: Yup.date().required("date reservation is required"),
             timeBooking: Yup.string().required("time reservation is required"),
-            numberOfPeople: Yup.number().min(1,"number of guests min is 1").max(10,"number of guests max is 10").required("number of guests is required"),
+            numberOfPeople: Yup.number().min(1, "number of guests min is 1").max(10, "number of guests max is 10").required("number of guests is required"),
             occasion: Yup.string().required(),
         }),
     })
 
-
-
     return (
 
-        <VStack w="100%" p={16} alignItems="flex-start">
+        <VStack w="100%" p={10} alignItems="flex-start">
             <Heading as="h1">
                 Reservation Table
             </Heading>
@@ -119,9 +130,14 @@ function FormBooking({getAvailableTimes=()=>{}, ...props}) {
                                     value={formik.values.timeBooking}
                                     onBlur={formik.getFieldProps('timeBooking').onBlur}
                                     onChange={formik.getFieldProps('timeBooking').onChange}>
-                                {availableTimes.map(item => <option value={item.value} key={item.value}>
-                                    {item.title}
-                                </option>)}
+                                <option value="">
+                                    Please select time
+                                </option>
+                                {
+                                    availableTimes.map(item => <option value={item.value} key={item.value}>
+                                        {item.label}
+                                    </option>)
+                                }
                             </Select>
                             <FormErrorMessage color="red.400">
                                 {formik.errors.timeBooking}
@@ -168,12 +184,6 @@ function FormBooking({getAvailableTimes=()=>{}, ...props}) {
                         <Button type="submit" colorScheme='blue'>Make Your reservation</Button>
                         {/*<input type="submit" value="Make Your reservation"/>*/}
                     </VStack>
-
-
-
-
-
-
 
 
                 </form>
