@@ -24,9 +24,8 @@ const socialMediaList = [
 function Footer(props) {
     return (
         <footer className="little-lemon-footer">
-            <div style={{height: '100%', margin: "auto 20"}}>
-                <img src={logo} alt="little lemon logo"/>
-            </div>
+
+            <img src={logo} alt="little lemon logo" style={{marginBottom: 'auto', marginTop: 'auto', marginRight:'20px'}}/>
 
             <ListMenu className="v-space-item" extraItem={<li>
                     <span style={{fontWeight: 'bold'}}>
