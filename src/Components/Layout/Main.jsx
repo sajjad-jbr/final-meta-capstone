@@ -5,7 +5,7 @@ import BookingPage from "../../Pages/BookingPage";
 
 function Main(props) {
     return (
-        <main>
+        <main style={{margin:"20px 0"}}>
             {props.children}
         </main>
     );
