@@ -1,7 +1,6 @@
-import React, {useReducer} from 'react';
+import React, {useReducer, useRef} from 'react';
 import {useFormik} from 'formik'
 import * as Yup from 'yup'
-import {useNavigate} from 'react-router-dom'
 import {
     Box,
     Button,
@@ -13,8 +12,8 @@ import {
     NumberInput,
     NumberInputField,
     Select,
-    VStack,
-    useToast
+    useToast,
+    VStack
 } from '@chakra-ui/react'
 
 import {fetchAPI, submitAPI, updateTimes} from "../../util/api";
@@ -33,19 +32,16 @@ export const initializeTimes = () => {
     return data.map((item) => ({value: item, label: item}))
 }
 
-function FormBooking({ ...props}) {
+function FormBooking({...props}) {
 
     const toast = useToast()
-
-
-
+    const numRef = useRef();
     const handleReset = () => {
-        formik.handleReset({
-            dateBooking: "",
-            timeBooking: "",
-            numberOfPeople: "",
-            occasion: ""
-        });
+        formik.resetForm();
+        setTimeout(() => {
+            numRef.current.value = ""
+        }, 200)
+
     }
 
     const [availableTimes, setAvailableTimes] = useReducer(updateTimes, initializeTimes())
@@ -66,7 +62,7 @@ function FormBooking({ ...props}) {
                 isClosable: true,
             })
             handleReset()
-        }else{
+        } else {
             toast({
                 title: 'Reservation registered.',
                 description: "error",
@@ -77,7 +73,7 @@ function FormBooking({ ...props}) {
         }
 
     }
-
+    console.log("sajjad ref", numRef)
     const formik = useFormik({
         onSubmit: handleSubmitForm,
         initialValues: {
@@ -108,11 +104,12 @@ function FormBooking({ ...props}) {
                     <VStack w={widthResponsive} px={2}>
                         <FormControl isInvalid={formik.touched.dateBooking && formik.errors.dateBooking}>
 
-                            <FormLabel htmlFor="firstName">Choose date</FormLabel>
+                            <FormLabel htmlFor="dateBooking">Choose date</FormLabel>
                             <Input
                                 type="date"
                                 id="dateBooking"
                                 name="dateBooking"
+                                aria-label="Choose date"
                                 value={formik.values.dateBooking}
                                 onChange={formik.getFieldProps('dateBooking').onChange}
                                 onBlur={formik.getFieldProps('dateBooking').onBlur}
@@ -127,6 +124,7 @@ function FormBooking({ ...props}) {
                             <FormLabel htmlFor="firstName">Choose time</FormLabel>
                             <Select id="res-time"
                                     name="timeBooking"
+                                    aria-label="Choose time"
                                     value={formik.values.timeBooking}
                                     onBlur={formik.getFieldProps('timeBooking').onBlur}
                                     onChange={formik.getFieldProps('timeBooking').onChange}>
@@ -148,13 +146,16 @@ function FormBooking({ ...props}) {
                     <VStack w={widthResponsive} px={2}>
                         <FormControl isInvalid={formik.touched.numberOfPeople && formik.errors.numberOfPeople}>
                             <FormLabel htmlFor="numberOfPeople">Number of guests</FormLabel>
-                            <NumberInput defaultValue={formik.values.numberOfPeople} min={1} max={10}
+                            <NumberInput min={1} max={10}
                             >
-                                <NumberInputField id="numberOfPeople"
-                                                  name="numberOfPeople"
-                                                  value={formik.values.numberOfPeople}
-                                                  onBlur={formik.getFieldProps('numberOfPeople').onBlur}
-                                                  onChange={formik.getFieldProps('numberOfPeople').onChange}/>
+                                <NumberInputField
+                                    id="numberOfPeople"
+                                    name="numberOfPeople"
+                                    aria-label="Number of guests"
+                                    ref={numRef}
+                                    value={formik.values.numberOfPeople}
+                                    onBlur={formik.getFieldProps('numberOfPeople').onBlur}
+                                    onChange={formik.getFieldProps('numberOfPeople').onChange}/>
                             </NumberInput>
                             <FormErrorMessage color="red.400">
                                 {formik.errors.numberOfPeople}
@@ -167,6 +168,7 @@ function FormBooking({ ...props}) {
                             <FormLabel htmlFor="occasion">Occasion</FormLabel>
                             <Select id="occasion"
                                     name="occasion"
+                                    aria-label="Occasion"
                                     value={formik.values.occasion}
                                     onBlur={formik.getFieldProps('occasion').onBlur}
                                     onChange={formik.getFieldProps('occasion').onChange}>
