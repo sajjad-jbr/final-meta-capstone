@@ -79,6 +79,11 @@ main{
     nav.little-lemon-navbar-mobile-mode {
         display: block;
     }
+
+    #main-image{
+        position: initial !important;
+        margin: 5px auto 30px auto;
+    }
 }
 
 @media only screen and (max-width: 670px) {
@@ -99,6 +104,11 @@ main{
         display: block;
     }
 
+    #main-image{
+        position: initial !important;
+        margin: 5px auto 30px auto;
+    }
+
 }
 
 @media only screen and (max-width: 768px) {
@@ -109,6 +119,11 @@ main{
 
     .little-lemon-header {
         display: block;
+    }
+
+    #main-image{
+        position: initial !important;
+        margin: 5px auto 30px auto;
     }
 }
 
